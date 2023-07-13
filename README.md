@@ -4,8 +4,8 @@ Phase Frontend Test: “Comments”
 
 Implement comment threads pinned on the canvas with React.
 Requirements:
-- A page with canvas (can use any graphics libraries like PIXI to implement)
-- Display a static image on the canvas
+- [x] A page with canvas (can use any graphics libraries like PIXI to implement)
+- [x] Display a static image on the canvas
 - [Bonus] Canvas can zoom in/out and pan around
 - [Bonus] Display more than one image
 - Start a comment thread anywhere in the canvas

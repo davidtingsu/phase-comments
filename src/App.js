@@ -1,31 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import * as PIXI from 'pixi.js';
-// import { Stage, Container, Sprite, Text } from '@pixi/react';
+import { Stage, Container, Sprite, Text } from '@pixi/react';
 
 function App() {
-  const app = new PIXI.Application({
-    background: '#1099bb',
-    resizeTo: window,
-  });
-  document.body.appendChild(app.view);
- console.log('document.body', document.body)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Stage options={{ backgroundAlpha: 0 }}>
+        <Container x={150} y={150}>
+          <Sprite
+            image="https://pixijs.io/pixi-react/img/bunny.png"
+          />
+        </Container>
+      </Stage>,
     </div>
   );
 }

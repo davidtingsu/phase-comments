@@ -1,7 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import * as PIXI from 'pixi.js';
+// import { Stage, Container, Sprite, Text } from '@pixi/react';
 
 function App() {
+  const app = new PIXI.Application({
+    background: '#1099bb',
+    resizeTo: window,
+  });
+  document.body.appendChild(app.view);
+ console.log('document.body', document.body)
   return (
     <div className="App">
       <header className="App-header">

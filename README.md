@@ -8,8 +8,8 @@ Requirements:
 - [x] Display a static image on the canvas
 - [Bonus] Canvas can zoom in/out and pan around
 - [Bonus] Display more than one image
-- Start a comment thread anywhere in the canvas
-- Clicking anywhere on the image displayed in the canvas should add a new
+- [] Start a comment thread anywhere in the canvas
+- [] Clicking anywhere on the image displayed in the canvas should add a new
 comment marker to the canvas and open the comment dialog
 - Comment markers should exist in the canvas and retain the position relative to
 the displayed image (independent of the pan and zoom)

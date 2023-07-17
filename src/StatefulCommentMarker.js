@@ -14,6 +14,7 @@ function StatefulCommentMarker(props) {
     // return 's';
     return (
         <CommentMarker
+            onClick={props.onClick || function(){console.log(['[debug] default on click'])}}
             point={props.point}
             isOpen={props.isOpen}
         />

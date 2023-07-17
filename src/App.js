@@ -36,7 +36,6 @@ const ContextBridge = ({ children, Context, render }) => {
   return (
     <Context.Consumer>
       {(value) => {
-        console.log('context consumer value', value)
         return render(
           <Stage options={options} onMount={() => {
             /* force a full-screen initial render */
@@ -56,15 +55,11 @@ function App() {
 
   const [markers, setMarkers] = useState([]);
   const [threadsMap, setThreadsMap] = useState({});
-  useEffect(() => {
-    console.log('threadsMap updated', threadsMap)
-  }, [threadsMap])
+
   const addCommentMarker = (e) => {
-    console.log(e);
     const id = new Date().toISOString();
     const point = new PointerWrapper(id, new Point(e.clientX, e.clientY));
     setThreadsMap((threadsMap) => {
-      console.log('threadsMap', threadsMap);
       return {
         ...threadsMap,
         [id]: {
@@ -80,7 +75,6 @@ function App() {
   };
 
   /* threadsMap}}> */
-  console.log('render threadsMap', threadsMap);
 
   return (
     <div className="App">
@@ -92,7 +86,7 @@ function App() {
               image={process.env.PUBLIC_URL + '/Original_Doge_meme.jpg'}
             />
           </Container>
-          <Container x={400} y={200} interactive={true} pointerdown={() => console.log('hi2')}>
+          <Container x={400} y={200} interactive={true}>
             <Sprite
               image={process.env.PUBLIC_URL + '/Original_Doge_meme.jpg'}
             />
@@ -101,17 +95,44 @@ function App() {
           {markers.map((pointWrapper) => {
             const point = pointWrapper.point;
             const id = pointWrapper.id;
-            return <StatefulCommentMarker key={pointWrapper.id} point={point} id={pointWrapper.id} isOpen={threadsMap[id]?.isOpen} />
+            return <StatefulCommentMarker
+              key={pointWrapper.id}
+              point={point}
+              id={pointWrapper.id}
+              isOpen={threadsMap[id]?.isOpen}
+              onClick={(e) => {
+                console.log('e', e, 'open comment')
+                e?.preventDefault();
+                setThreadsMap((threadsMap) => {
+                  const id = pointWrapper.id;
+                  if (threadsMap[id].isOpen) return;
+                  return {
+                    [id]: {
+                      ...threadsMap[id],
+                      isOpen: true,
+                    }
+                  };
+                })
+              }}
+            />
           })}
         </Clickable>
       </ContextBridge >
       {Object.entries(threadsMap).map(([id, meta]) => {
-        console.log('meta', meta.isOpen)
         if (meta.isOpen) {
           return (
-            <div key={id} style={{position: 'absolute', top: meta.point.y, left: meta.point.x}}>
+            <div key={id} style={{ position: 'absolute', top: meta.point.y, left: meta.point.x }}>
               {/* <b>{meta.point.x},{meta.point.y}</b> */}
-              <CommentComponent />
+              <CommentComponent onClickOutside={() => {
+                setThreadsMap((threadsMap) => {
+                  return {
+                    [id]: {
+                      ...threadsMap[id],
+                      isOpen: false,
+                    }
+                  };
+                })
+              }} />
 
             </div>
           );

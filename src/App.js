@@ -5,6 +5,7 @@ import Clickable from './Clickable';
 // import CommentMarker from './CommentMarker';
 import StatefulCommentMarker from './StatefulCommentMarker';
 import { CommentsContext } from './CommentsContext';
+import CommentComponent from './Comment';
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -104,6 +105,19 @@ function App() {
           })}
         </Clickable>
       </ContextBridge >
+      {Object.entries(threadsMap).map(([id, meta]) => {
+        console.log('meta', meta.isOpen)
+        if (meta.isOpen) {
+          return (
+            <div key={id} style={{position: 'absolute', top: meta.point.y, left: meta.point.x}}>
+              {/* <b>{meta.point.x},{meta.point.y}</b> */}
+              <CommentComponent />
+
+            </div>
+          );
+        }
+        return null;
+      })}
     </div>
   );
 }

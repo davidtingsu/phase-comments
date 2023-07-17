@@ -7,8 +7,8 @@ function CommentMarker(props) {
     const { point } = props;
     const draw = useCallback((g) => {
         g.clear();
-        g.beginFill(0xffff0b, 0.5);
-        g.drawCircle(point.x, point.y, 10);
+        g.beginFill(0x0000FF, 0.5);
+        g.drawCircle(point.x, point.y, 4);
         g.endFill();
     }, []);
 

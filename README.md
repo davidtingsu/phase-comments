@@ -8,21 +8,21 @@ Requirements:
 - [x] Display a static image on the canvas
 - [Bonus] Canvas can zoom in/out and pan around
 - [Bonus] Display more than one image
-- [] Start a comment thread anywhere in the canvas
-- [] Clicking anywhere on the image displayed in the canvas should add a new
+- [x] Start a comment thread anywhere in the canvas
+- [x] Clicking anywhere on the image displayed in the canvas should add a new
 comment marker to the canvas and open the comment dialog
-- Comment markers should exist in the canvas and retain the position relative to
+- [?]Comment markers should exist in the canvas and retain the position relative to
 the displayed image (independent of the pan and zoom)
 - [Bonus] If comments are placed on a particular image they should be attached to
 that image, so that if the image to be moved or removed all comments placed on
 it should move with it.
 
 - Comment dialog:
-- Should be implemented outside of the canvas in React.
-- Should not change scale if the canvas is zoomed in or zoomed out.
-- Should have a thread of comments and a field to add a new comment.
-- Can be closed
-- Should have a way to resolve the thread. If the thread is resolved, the
+- [x]Should be implemented outside of the canvas in React.
+- [?]Should not change scale if the canvas is zoomed in or zoomed out.
+- [ ] Should have a thread of comments and a field to add a new comment.
+- [ ] Can be closed
+- [ ] Should have a way to resolve the thread. If the thread is resolved, the
 corresponding marker on the canvas should be deleted as well.
 - [Bonus] have ability for multiple users to leave comments in any thread (user
 authentication is not required)

@@ -5,7 +5,7 @@ import Clickable from './Clickable';
 // import CommentMarker from './CommentMarker';
 import StatefulCommentMarker from './StatefulCommentMarker';
 import { CommentsContext } from './CommentsContext';
-import CommentComponent from './Comment';
+import { StatefulComment as CommentComponent } from './Comment';
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -17,6 +17,7 @@ class Comment {
   constructor(authorId, text) {
     this.authorId = authorId;
     this.text = text;
+    this.timestamp = new Date().toISOString();
   }
 }
 
@@ -123,17 +124,31 @@ function App() {
           return (
             <div key={id} style={{ position: 'absolute', top: meta.point.y, left: meta.point.x }}>
               {/* <b>{meta.point.x},{meta.point.y}</b> */}
-              <CommentComponent onClickOutside={() => {
-                setThreadsMap((threadsMap) => {
-                  return {
-                    [id]: {
-                      ...threadsMap[id],
-                      isOpen: false,
-                    }
-                  };
-                })
-              }} />
-
+              <CommentComponent
+                onSubmit={(values) => {
+                  console.log('values', values);
+                  setThreadsMap((threadsMap) => {
+                    return {
+                      [id]: {
+                        ...threadsMap[id],
+                        isOpen: true,
+                        comments: (threadsMap[id].comments || []).concat(
+                          [new Comment(undefined, values.comment)]
+                        ),
+                      }
+                    };
+                  })
+                }}
+                onClickOutside={() => {
+                  setThreadsMap((threadsMap) => {
+                    return {
+                      [id]: {
+                        ...threadsMap[id],
+                        isOpen: false,
+                      }
+                    };
+                  })
+                }} />
             </div>
           );
         }

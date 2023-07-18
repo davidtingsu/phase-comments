@@ -5,7 +5,7 @@ import Clickable from './Clickable';
 // import CommentMarker from './CommentMarker';
 import StatefulCommentMarker from './StatefulCommentMarker';
 import { CommentsContext } from './CommentsContext';
-import { StatefulComment as CommentComponent } from './Comment';
+import { StatefulComment as CommentComponent, PublishedComment } from './Comment';
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -56,6 +56,11 @@ function App() {
 
   const [markers, setMarkers] = useState([]);
   const [threadsMap, setThreadsMap] = useState({});
+
+  const [user, setUser] = useState({
+    name: 'Cosma Faustine'
+  });
+
 
   const addCommentMarker = (e) => {
     const id = new Date().toISOString();
@@ -120,13 +125,13 @@ function App() {
         </Clickable>
       </ContextBridge >
       {Object.entries(threadsMap).map(([id, meta]) => {
+        console.log('id', id);
         if (meta.isOpen) {
           return (
             <div key={id} style={{ position: 'absolute', top: meta.point.y, left: meta.point.x }}>
               {/* <b>{meta.point.x},{meta.point.y}</b> */}
               <CommentComponent
                 onSubmit={(values) => {
-                  console.log('values', values);
                   setThreadsMap((threadsMap) => {
                     return {
                       [id]: {
@@ -141,6 +146,15 @@ function App() {
                 }}
                 onClickOutside={() => {
                   setThreadsMap((threadsMap) => {
+                    // delete on click outside if no comment was added
+                    debugger;
+                    if (!threadsMap[id]?.comments?.length){
+                      const copy = {...threadsMap};
+                      delete copy[id];
+                      // console.log(markers.filter(wra => pointer !== threadsMap[id].point), threadsMap[id].point)
+                      setMarkers(markers.filter(pointerWrapper => pointerWrapper.point !== threadsMap[id].point));
+                      return copy;
+                    }
                     return {
                       [id]: {
                         ...threadsMap[id],
@@ -149,6 +163,9 @@ function App() {
                     };
                   })
                 }} />
+                {threadsMap[id].comments?.map((comment) => {
+                  return (<PublishedComment name={user.name} text={comment.text} timestamp={comment.timestamp}/>);
+                })}
             </div>
           );
         }

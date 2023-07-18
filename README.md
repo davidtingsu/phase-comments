@@ -20,17 +20,17 @@ it should move with it.
 - Comment dialog:
 - [x]Should be implemented outside of the canvas in React.
 - [?]Should not change scale if the canvas is zoomed in or zoomed out.
-- [ ] Should have a thread of comments and a field to add a new comment.
-- [ ] Can be closed
+- [x] Should have a thread of comments and a field to add a new comment.
+- [+] Can be closed
 - [ ] Should have a way to resolve the thread. If the thread is resolved, the
 corresponding marker on the canvas should be deleted as well.
 - [Bonus] have ability for multiple users to leave comments in any thread (user
 authentication is not required)
 
 - Comments:
-- Should display it’s content
-- Display the time it was posted at
-- Display the username who wrote the comment
+- [x] Should display it’s content
+- [x] Display the time it was posted at
+- [x] Display the username who wrote the comment
 
 This implementation doesn’t need to have the backend and can rely on client side technologies
 for keeping user data.

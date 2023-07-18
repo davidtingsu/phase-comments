@@ -9,8 +9,9 @@ export function StatefulComment(props) {
             comment: '',
         },
         onSubmit: values => {
+            if (!values.comment) return;
             props.onSubmit(values);
-            alert(JSON.stringify(values, null, 2));
+            formik.resetForm();
         },
     });
     return (<Comment {...props} onChange={formik.handleChange} value={formik.values.comment} onSubmit={formik.handleSubmit} />)
@@ -23,7 +24,7 @@ function Comment(props) {
     useClickAway(ref, props.onClickOutside || function () { });
     return (
         <form ref={ref} onSubmit={props.onSubmit}>
-            <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+            <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                 <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="comment" className="sr-only">Your comment</label>
                     <textarea onChange={props.onChange} value={props.value} id="comment" rows="4" className="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write a comment..." required></textarea>
@@ -35,6 +36,24 @@ function Comment(props) {
                 </div>
             </div>
         </form>
+    );
+}
+
+export function PublishedComment(props) {
+    return (
+        <article class="p-6 text-base bg-white rounded-lg dark:bg-gray-900">
+            <footer class="flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                    <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                        <img
+                            class="mr-2 w-6 h-6 rounded-full"
+                            src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                            alt={props.name}/>{props.name}</p>
+                </div>
+            </footer>
+            <p class="text-left text-xs text-gray-600 dark:text-gray-400">{new Date(props.timestamp).toLocaleString()}</p>
+            <p class="text-left text-sm text-gray-500 dark:text-gray-400 ">{props.text}</p>
+        </article>
     );
 }
 export default Comment;

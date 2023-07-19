@@ -22,7 +22,8 @@ function CommentMarker(props) {
     return (
         <Sprite
             interactive={true}
-            onmouseenter={() => console.log('[debug] mouseenter')}
+            onmouseenter={props.onMouseEnter}
+            onmouseleave={props.onMouseLeave}
             // onclick={() => console.log('[debug] click sprite')}
             click={props.onClick}
             image={"https://www.svgrepo.com/show/159239/comment.svg"}

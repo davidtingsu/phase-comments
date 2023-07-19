@@ -55,14 +55,16 @@ const ContextBridge = ({ children, Context, render }) => {
 function App() {
 
   const [markers, setMarkers] = useState([]);
+  const [hasHoveredComment, setHasHoveredComment] = useState(false);
   const [threadsMap, setThreadsMap] = useState({});
 
   const [user, setUser] = useState({
     name: 'Cosma Faustine'
   });
 
-
-  const addCommentMarker = (e) => {
+  const addCommentMarker = React.useCallback((e) => {
+    console.log('addCommentMarker hasHoveredComment', hasHoveredComment)
+    if (hasHoveredComment) return;
     console.log('[debug] addComment event', e)
     const id = new Date().toISOString();
     const point = new PointerWrapper(id, new Point(e.clientX, e.clientY));
@@ -79,7 +81,7 @@ function App() {
     setMarkers((markers) => {
       return [...markers, point];
     })
-  };
+  }, [hasHoveredComment]);
 
   /* threadsMap}}> */
 
@@ -107,6 +109,14 @@ function App() {
               point={point}
               id={pointWrapper.id}
               isOpen={threadsMap[id]?.isOpen}
+              onMouseEnter={(e) => {
+                console.log('mouse enter');
+                setHasHoveredComment(true)}
+              }
+              onMouseLeave={(e) => {
+                console.log('mouse leave');
+                setHasHoveredComment(false)}
+              }
               onClick={(e) => {
                 console.log('[debug] open comment', pointWrapper.id, e)
                 e.stopPropagation();

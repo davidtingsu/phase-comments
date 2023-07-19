@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 import { useFormik } from 'formik';
 
@@ -16,14 +16,38 @@ export function StatefulComment(props) {
     });
     return (<Comment {...props} onChange={formik.handleChange} value={formik.values.comment} onSubmit={formik.handleSubmit} />)
 }
-function Comment(props) {
-    const ref = useRef(null);
-    const textRef = useRef(null);
+const withResolvable = Component => React.forwardRef((props, ref) => {
+    return (
+        <div ref={ref} className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+            <div className='flex justify-end' onClick={() => {
+                if (props.onResolved){
+                    props.onResolved();
+                }
+            }}>
+                <span title="Resolve" className='active:opacity-30 hover:opacity-90'>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </span>
+            </div>
+            <Component {...props} />
+        </div>
+    );
+});
 
+const withClickAway = Component =>(props) => {
+    const ref = useRef(null);
     // https://flowbite.com/docs/forms/textarea/#comment-box
     useClickAway(ref, props.onClickOutside || function () { });
+    return (<Component {...props} ref={ref} />);
+};
+
+export const ResolveableComment = withClickAway(withResolvable(StatefulComment));
+
+function Comment(props) {
+
     return (
-        <form ref={ref} onSubmit={props.onSubmit}>
+        <form onSubmit={props.onSubmit}>
             <div className="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
                 <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
                     <label for="comment" className="sr-only">Your comment</label>
@@ -48,7 +72,7 @@ export function PublishedComment(props) {
                         <img
                             class="mr-2 w-6 h-6 rounded-full"
                             src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                            alt={props.name}/>{props.name}</p>
+                            alt={props.name} />{props.name}</p>
                 </div>
             </footer>
             <p class="text-left text-xs text-gray-600 dark:text-gray-400">{new Date(props.timestamp).toLocaleString()}</p>

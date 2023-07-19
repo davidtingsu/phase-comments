@@ -5,11 +5,11 @@ import Clickable from './Clickable';
 // import CommentMarker from './CommentMarker';
 import StatefulCommentMarker from './StatefulCommentMarker';
 import { CommentsContext } from './CommentsContext';
-import { StatefulComment as CommentComponent, PublishedComment } from './Comment';
+import { ResolveableComment as CommentComponent, PublishedComment } from './Comment';
 class Point {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    this.x = Math.floor(x);
+    this.y = Math.floor(y);
   }
 }
 
@@ -63,6 +63,7 @@ function App() {
 
 
   const addCommentMarker = (e) => {
+    console.log('[debug] addComment event', e)
     const id = new Date().toISOString();
     const point = new PointerWrapper(id, new Point(e.clientX, e.clientY));
     setThreadsMap((threadsMap) => {
@@ -107,11 +108,12 @@ function App() {
               id={pointWrapper.id}
               isOpen={threadsMap[id]?.isOpen}
               onClick={(e) => {
-                console.log('e', e, 'open comment')
+                console.log('[debug] open comment', pointWrapper.id, e)
+                e.stopPropagation();
                 e?.preventDefault();
                 setThreadsMap((threadsMap) => {
                   const id = pointWrapper.id;
-                  if (threadsMap[id].isOpen) return;
+                  if (threadsMap[id]?.isOpen) return;
                   return {
                     [id]: {
                       ...threadsMap[id],
@@ -144,12 +146,21 @@ function App() {
                     };
                   })
                 }}
+                onResolved={() => {
+                  setThreadsMap((threadsMap) => {
+                    const copy = { ...threadsMap };
+                    delete copy[id];
+                    // console.log(markers.filter(wra => pointer !== threadsMap[id].point), threadsMap[id].point)
+                    setMarkers(markers.filter(pointerWrapper => pointerWrapper.point !== threadsMap[id].point));
+                    return copy;
+                  });
+                }}
                 onClickOutside={() => {
                   setThreadsMap((threadsMap) => {
                     // delete on click outside if no comment was added
                     debugger;
-                    if (!threadsMap[id]?.comments?.length){
-                      const copy = {...threadsMap};
+                    if (!threadsMap[id]?.comments?.length) {
+                      const copy = { ...threadsMap };
                       delete copy[id];
                       // console.log(markers.filter(wra => pointer !== threadsMap[id].point), threadsMap[id].point)
                       setMarkers(markers.filter(pointerWrapper => pointerWrapper.point !== threadsMap[id].point));
@@ -163,9 +174,9 @@ function App() {
                     };
                   })
                 }} />
-                {threadsMap[id].comments?.map((comment) => {
-                  return (<PublishedComment name={user.name} text={comment.text} timestamp={comment.timestamp}/>);
-                })}
+              {threadsMap[id].comments?.map((comment) => {
+                return (<PublishedComment name={user.name} text={comment.text} timestamp={comment.timestamp} />);
+              })}
             </div>
           );
         }

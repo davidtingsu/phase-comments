@@ -7,7 +7,9 @@ function Clickable(props) {
     useEffect(() => {
         // https://stackoverflow.com/a/62927828/1123985
         if (props.onClick){
+            // app.stage.on('click', props.onClick);
             app.renderer.view.addEventListener('click', props.onClick);
+            // app.renderer.view.addEventListener('pointerdown', props.onClick);
         }
     }, [])
 
